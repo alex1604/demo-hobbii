@@ -8,7 +8,7 @@
       </popup-menu>
     </v-card-title>
 
-    <v-text justify="center" align="center">
+    <v-col justify="center" align="center">
       <h1>15h</h1>
       <v-row justify="center" class="mt-2">
         <v-btn text color="teal accent-5" :disabled="isTimerOn"
@@ -18,7 +18,7 @@
           >Stop timer</v-btn
         >
       </v-row>
-    </v-text>
+    </v-col>
     <v-card-actions class="justify-center">
       <v-btn text color="teal accent-5" @click="toggleExpandedSection">
         <v-icon>mdi-chevron-down</v-icon>
