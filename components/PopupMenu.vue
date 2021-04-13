@@ -1,21 +1,22 @@
 <template>
   <div class="text-center">
-    <!-- <v-switch v-model="closeOnClick" label="Close on click"></v-switch> -->
-    <v-menu top :close-on-click="closeOnClick">
+    <v-menu top :close-on-click="true" min-width="200px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn text v-bind="attrs" v-on="on">
+        <v-btn text v-bind="attrs" v-on="on" class="popup-menu-button">
           <slot></slot>
         </v-btn>
       </template>
 
       <v-list>
-        <v-list-item-title @click="emitComplete"
+        <v-list-item-title class="popup-menu-item" @click="emitComplete"
           >Mark as complete</v-list-item-title
         >
-        <v-list-item-title @click="emitInvoice"
+        <v-divider></v-divider>
+        <v-list-item-title class="popup-menu-item" @click="emitInvoice"
           >Generate invoice</v-list-item-title
         >
-        <v-list-item-title @click="emitDelete"
+        <v-divider></v-divider>
+        <v-list-item-title class="popup-menu-item" @click="emitDelete"
           >Delete project</v-list-item-title
         >
       </v-list>
@@ -38,3 +39,13 @@ export default class PopupMenu extends Vue {
   }
 }
 </script>
+<style lang="scss" scoped>
+.popup-menu-button {
+  min-width: 2rem !important;
+  padding: 0 !important;
+}
+
+.popup-menu-item {
+  padding: 5px;
+}
+</style>

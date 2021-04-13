@@ -10,10 +10,17 @@
 
     <v-text justify="center" align="center">
       <h1>15h</h1>
-      <v-btn text color="teal accent-5">Start timer</v-btn>
+      <v-row justify="center" class="mt-2">
+        <v-btn text color="teal accent-5" :disabled="isTimerOn"
+          >Start timer</v-btn
+        >
+        <v-btn text color="red accent-4" :disabled="isTrackingAnotherProject"
+          >Stop timer</v-btn
+        >
+      </v-row>
     </v-text>
     <v-card-actions class="justify-center">
-      <v-btn text color="teal accent-4" @click="toggleExpandedSection">
+      <v-btn text color="teal accent-5" @click="toggleExpandedSection">
         <v-icon>mdi-chevron-down</v-icon>
       </v-btn>
     </v-card-actions>
@@ -25,11 +32,12 @@
         style="height: 100%"
       >
         <v-card-text class="pb-0">
-          <p class="display-1 text--primary">Origin</p>
-          <p>
-            late 16th century (as a noun denoting a place where alms were
-            distributed): from medieval Latin eleemosynarius, from late Latin
-            eleemosyna ‘alms’, from Greek eleēmosunē ‘compassion’
+          <p class="display-1 text--primary">Id: {{ project.id || "" }}</p>
+          <p class="display-1 text--secondary">
+            Client: {{ project.clientName || "" }}
+          </p>
+          <p class="display-1 text--secondary">
+            Invoiced hours: {{ project.invoicedHours || "" }}
           </p>
         </v-card-text>
         <v-card-actions class="pt-0 justify-center">
@@ -53,7 +61,18 @@ import IProject from "~/types/Project";
 })
 export default class Card extends Vue {
   @Prop() project!: IProject;
+  @Prop() isTimerOn: boolean;
+  @Prop() activeProjectId: string;
+
   reveal: boolean = false;
+
+  get isTrackingAnotherProject() {
+    return this.isTimerOn && this.activeProjectId !== this.project?.id;
+  }
+
+  get disableStartTimer() {
+    return this.isTimerOn;
+  }
 
   toggleExpandedSection() {
     this.reveal = !this.reveal;
