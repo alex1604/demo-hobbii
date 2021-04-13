@@ -25,10 +25,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
-// The @Component decorator indicates the class is a Vue component
 @Component
 export default class PopupMenu extends Vue {
-  // Component methods can be declared as instance methods
   emitComplete() {
     this.$emit("complete");
   }

@@ -62,8 +62,9 @@ export default class Card extends Vue {
 </script>
 <style lang="scss" scoped>
 .v-card {
-  width: 25rem;
-  height: 20rem;
+  min-width: 20rem;
+  width: 30%;
+  height: 15rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
