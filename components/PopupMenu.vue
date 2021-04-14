@@ -16,8 +16,8 @@
           >Generate invoice</v-list-item-title
         >
         <v-divider></v-divider>
-        <v-list-item-title class="popup-menu-item" @click="emitDelete"
-          >Delete project</v-list-item-title
+        <v-list-item-title class="popup-menu-item" @click="emitRemove"
+          >Remove project</v-list-item-title
         >
       </v-list>
     </v-menu>
@@ -34,8 +34,8 @@ export default class PopupMenu extends Vue {
   emitInvoice() {
     this.$emit("invoice");
   }
-  emitDelete() {
-    this.$emit("delete");
+  emitRemove() {
+    this.$emit("remove");
   }
 }
 </script>
@@ -47,5 +47,6 @@ export default class PopupMenu extends Vue {
 
 .popup-menu-item {
   padding: 5px;
+  cursor: pointer;
 }
 </style>
