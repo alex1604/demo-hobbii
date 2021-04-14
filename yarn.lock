@@ -9760,6 +9760,11 @@ uniq@^1.0.1:
   resolved "https://registry.yarnpkg.com/uniq/-/uniq-1.0.1.tgz#b31c5ae8254844a3a8281541ce2b04b865a734ff"
   integrity sha1-sxxa6CVIRKOoKBVBzisEuGWnNP8=
 
+uniqid@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/uniqid/-/uniqid-5.3.0.tgz#4545f8e9c9a5830ef804e512cca6a9331e9761bf"
+  integrity sha512-Jq8EzvAT8/CcLu8tzoSiylnzPkNhJJKpnMT964Dj1jI4pG4sKYP9aFVByNTp8KzMvYlW1Um63PCDqtOoujNzrA==
+
 uniqs@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/uniqs/-/uniqs-2.0.0.tgz#ffede4b36b25290696e6e165d4a59edb998e6b02"
@@ -10072,6 +10077,11 @@ vuetify@^2.4.2:
   version "2.4.9"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.4.9.tgz#c4ccf4cf3dc81d426da78913c32d47ab33ede38f"
   integrity sha512-IS+ZKCk4+RhN8PW9mw6dLSGy0hnFZ0YwOg0Ga+sr9bngbSOI6nw0p+Y/U00vRw8DPScqUmK5cSrI8RhiaTpXow==
+
+vuex-class-decorator@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/vuex-class-decorator/-/vuex-class-decorator-1.0.6.tgz#120a14457b610ca2e210530a98b16e2f76a3b43f"
+  integrity sha512-Budmn5tuKHorTK4aLAIX3fGvximGzbGZP3i3IOXWvMcQ8X0CDRdzi2kPrWSvgUaJzkwwwot/tl15ZkFajqFbHQ==
 
 vuex@^3.6.2:
   version "3.6.2"

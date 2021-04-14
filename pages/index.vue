@@ -1,33 +1,13 @@
 <template>
-  <v-container>
-    <rounded-button text="Create new project" class="mb-6" />
-    <v-row justify="center" align="center" class="flex-wrap">
-      <card />
-      <card />
-      <card />
-      <card />
-      <card />
-      <card />
-      <card />
-    </v-row>
-  </v-container>
+  <projects-overview />
 </template>
 
 <script>
-import Card from "~/components/Card.vue";
-import RoundedButton from "~/components/RoundedButton.vue";
+import ProjectsOverview from "~/components/ProjectsOverview.vue";
 
 export default {
   components: {
-    Card,
-    RoundedButton,
+    ProjectsOverview,
   },
 };
 </script>
-<style lang="scss" scoped>
-.wrap {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-</style>

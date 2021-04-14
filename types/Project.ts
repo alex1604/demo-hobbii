@@ -1,3 +1,5 @@
+import { Moment } from "moment";
+
 interface IInvoice {
     id: string;
     projectId: string;
@@ -5,11 +7,16 @@ interface IInvoice {
     amount: number;
 }
 
+interface ITimeLog {
+    start: Moment;
+    end: Moment;
+}
+
 export default interface IProject {
     id: string;
     clientName: string;
-    projectId: string;
-    projectName: string
+    projectName: string;
     totalHours: number;
     invoices: IInvoice[];
+    invoicedHours: number;
 }

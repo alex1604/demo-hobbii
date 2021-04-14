@@ -1,15 +1,15 @@
 <template>
   <v-card class="mt-4 mx-4">
     <v-card-title>
-      Project 1
+      {{ project.projectName }}
       <v-spacer></v-spacer>
-      <popup-menu>
+      <popup-menu @remove="emitRemove">
         <v-icon>mdi-dots-vertical</v-icon>
       </popup-menu>
     </v-card-title>
 
-    <v-text justify="center" align="center">
-      <h1>15h</h1>
+    <v-col justify="center" align="center">
+      <h1>{{ project.totalHours }}</h1>
       <v-row justify="center" class="mt-2">
         <v-btn text color="teal accent-5" :disabled="isTimerOn"
           >Start timer</v-btn
@@ -18,7 +18,7 @@
           >Stop timer</v-btn
         >
       </v-row>
-    </v-text>
+    </v-col>
     <v-card-actions class="justify-center">
       <v-btn text color="teal accent-5" @click="toggleExpandedSection">
         <v-icon>mdi-chevron-down</v-icon>
@@ -32,13 +32,9 @@
         style="height: 100%"
       >
         <v-card-text class="pb-0">
-          <p class="display-1 text--primary">Id: {{ project.id || "" }}</p>
-          <p class="display-1 text--secondary">
-            Client: {{ project.clientName || "" }}
-          </p>
-          <p class="display-1 text--secondary">
-            Invoiced hours: {{ project.invoicedHours || "" }}
-          </p>
+          <p class="text--secondary">Client: {{ project.clientName }}</p>
+          <p>Invoiced hours: {{ project.invoicedHours }}</p>
+          <small>project_id: {{ project.id }}</small>
         </v-card-text>
         <v-card-actions class="pt-0 justify-center">
           <v-btn text color="teal accent-4" @click="toggleExpandedSection">
@@ -50,7 +46,8 @@
   </v-card>
 </template>
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Vue, Prop, Component } from "vue-property-decorator";
+import { State } from "vuex-class-decorator";
 import PopupMenu from "~/components/PopupMenu.vue";
 import IProject from "~/types/Project";
 
@@ -61,8 +58,8 @@ import IProject from "~/types/Project";
 })
 export default class Card extends Vue {
   @Prop() project!: IProject;
-  @Prop() isTimerOn: boolean;
-  @Prop() activeProjectId: string;
+  @State("isTimerOn") isTimerOn: boolean;
+  @State("activeProjectId") activeProjectId: string;
 
   reveal: boolean = false;
 
@@ -76,6 +73,10 @@ export default class Card extends Vue {
 
   toggleExpandedSection() {
     this.reveal = !this.reveal;
+  }
+
+  emitRemove() {
+    this.$emit("remove", this.project.id);
   }
 }
 </script>
