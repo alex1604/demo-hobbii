@@ -3,7 +3,7 @@
     <v-card-title>
       {{ project.projectName }}
       <v-spacer></v-spacer>
-      <popup-menu @remove="emitRemove">
+      <popup-menu @remove="emitRemove" @invoice="emitInvoice">
         <v-icon>mdi-dots-vertical</v-icon>
       </popup-menu>
     </v-card-title>
@@ -39,7 +39,7 @@
         class="transition-fast-in-fast-out v-card--reveal"
         style="height: 100%"
       >
-        <v-card-text class="pb-0">
+        <v-card-text class="pb-0 h-full">
           <p class="text--secondary">Client: {{ project.clientName }}</p>
           <p>Invoiced hours: {{ project.invoicedHours }}</p>
           <small>project_id: {{ project.id }}</small>
@@ -93,6 +93,10 @@ export default class Card extends Vue {
 
   emitStopTimer() {
     this.$emit("stopTimer", this.project.id);
+  }
+
+  emitInvoice() {
+    this.$emit("invoice", this.project.id);
   }
 }
 </script>

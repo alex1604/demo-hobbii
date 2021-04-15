@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <create-project-modal
+      v-if="!archiveView"
       :isVisible="showCreateProjectModal"
       @cancel="toggleCreateProjectModal"
       @create="createProject"
@@ -20,8 +21,15 @@
         @remove="triggerRemovePrompt"
         @startTimer="dispatchStartTrackingAction"
         @stopTimer="dispatchStopTrackingAction"
+        @invoice="dispatchAddInvoiceAction"
       />
     </v-row>
+    <invoice-alert
+      v-if="latestInvoice"
+      :invoice="latestInvoice"
+      :isVisible="displayInvoice"
+      @confirm="dismissInvoice"
+    />
     <remove-prompt
       :isVisible="showRemovePrompt"
       :projectName="removedProjectName"
@@ -31,12 +39,12 @@
   </v-container>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import Card from "@/components/Card.vue";
 import CreateProjectModal from "@/components/CreateProjectModal.vue";
 import RoundedButton from "@/components/RoundedButton.vue";
 import { Action, State } from "vuex-class-decorator";
-import IProject from "~/types/Project";
+import IProject, { IInvoice } from "~/types/Project";
 
 @Component({
   components: {
@@ -50,11 +58,21 @@ export default class ProjectsOverview extends Vue {
   @Action("removeProject") dispatchRemoveProjectAction;
   @Action("startTracking") dispatchStartTrackingAction;
   @Action("stopTracking") dispatchStopTrackingAction;
-  @State("projects") projects: IProject[];
+  @Action("addInvoice") dispatchAddInvoiceAction;
+  @Action("setDisplayInvoice") dispatchSetDisplayInvoiceAction;
+  @State("projects") activeprojects: IProject[];
+  @State("archive") archive: IProject[];
+  @State("latestInvoice") latestInvoice: IInvoice;
+  @State("displayInvoice") displayInvoice: boolean;
+  @Prop({ default: false }) archiveView: boolean;
 
   showCreateProjectModal: boolean = false;
   showRemovePrompt: boolean = false;
   currentRemoveId: string = "";
+
+  get projects(): IProject[] {
+    return this.archiveView ? this.archive : this.activeprojects;
+  }
 
   get removedProjectName() {
     return this.projects.find(
@@ -92,6 +110,10 @@ export default class ProjectsOverview extends Vue {
     this.toggleRemovePrompt();
     this.dispatchRemoveProjectAction(this.currentRemoveId);
     this.currentRemoveId = "";
+  }
+
+  dismissInvoice() {
+    this.dispatchSetDisplayInvoiceAction(false);
   }
 }
 </script>

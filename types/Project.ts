@@ -1,8 +1,9 @@
 import { Moment } from "moment";
 
-interface IInvoice {
+export interface IInvoice {
     id: string;
     projectId: string;
+    projectName: string;
     hours: number;
     amount: number;
 }

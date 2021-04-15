@@ -46,7 +46,7 @@ export default class PopupMenu extends Vue {
 }
 
 .popup-menu-item {
-  padding: 5px;
+  padding: 5px 15px;
   cursor: pointer;
 }
 </style>

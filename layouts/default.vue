@@ -58,7 +58,7 @@ export default {
         {
           icon: "mdi-archive",
           title: "Archive",
-          to: "/inspire",
+          to: "/archive",
         },
       ],
       miniVariant: false,
