@@ -28,6 +28,7 @@ import { IInvoice } from "~/types/Project";
 @Component
 export default class InvoiceAlert extends Vue {
   @State("hourlyRate") hourlyRate: number;
+
   @Prop() invoice: IInvoice;
   @Prop({ default: false }) isVisible: boolean;
 

@@ -12,12 +12,18 @@
         @click="toggleCreateProjectModal"
       />
     </create-project-modal>
-    <v-row justify="center" align="center" class="flex-wrap">
+    <v-row
+      justify="center"
+      align="center"
+      class="flex-wrap"
+      v-if="!isProjectsEmpty"
+    >
       <card
-        :v-if="!isProjectsEmpty"
         v-for="project in projects"
+        :archiveMode="archiveView"
         :project="project"
         :key="project.id"
+        @complete="dispatchArchiveProjectAction"
         @remove="triggerRemovePrompt"
         @startTimer="dispatchStartTrackingAction"
         @stopTimer="dispatchStopTrackingAction"
@@ -60,10 +66,14 @@ export default class ProjectsOverview extends Vue {
   @Action("stopTracking") dispatchStopTrackingAction;
   @Action("addInvoice") dispatchAddInvoiceAction;
   @Action("setDisplayInvoice") dispatchSetDisplayInvoiceAction;
+  @Action("archiveProject") dispatchArchiveProject;
+  @Action("archiveProject") dispatchArchiveProjectAction;
+
   @State("projects") activeprojects: IProject[];
   @State("archive") archive: IProject[];
   @State("latestInvoice") latestInvoice: IInvoice;
   @State("displayInvoice") displayInvoice: boolean;
+
   @Prop({ default: false }) archiveView: boolean;
 
   showCreateProjectModal: boolean = false;

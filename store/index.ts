@@ -167,7 +167,7 @@ export const actions = {
         const targetProject: IProject | undefined = state.projects.find((project: IProject) => project.id === projectId);
         if (targetProject) {
             commit('archiveProject', targetProject);
-            commit('removeProject', targetProject)
+            commit('removeProject', projectId)
         }
     }
 }

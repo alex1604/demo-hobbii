@@ -65,7 +65,9 @@ import { Getter } from "vuex-class-decorator";
 @Component
 export default class CreateProjectModal extends Vue {
   @Prop({ default: true }) isVisible: boolean;
+
   @Getter("projectNames") projectNames: string[];
+
   projectName: string = "";
   clientName: string = "";
 

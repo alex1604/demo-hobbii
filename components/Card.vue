@@ -1,16 +1,21 @@
 <template>
   <v-card class="mt-4 mx-4">
-    <v-card-title>
-      {{ project.projectName }}
+    <v-card-title
+      >{{ project.projectName }}
       <v-spacer></v-spacer>
-      <popup-menu @remove="emitRemove" @invoice="emitInvoice">
+      <popup-menu
+        v-if="!archiveMode"
+        @complete="emitComplete"
+        @remove="emitRemove"
+        @invoice="emitInvoice"
+      >
         <v-icon>mdi-dots-vertical</v-icon>
       </popup-menu>
     </v-card-title>
 
     <v-col justify="center" align="center">
       <h1>{{ project.totalHours }} h</h1>
-      <v-row justify="center" class="mt-2">
+      <v-row v-if="!archiveMode" justify="center" class="mt-2">
         <v-btn
           text
           color="teal accent-5"
@@ -39,7 +44,7 @@
         class="transition-fast-in-fast-out v-card--reveal"
         style="height: 100%"
       >
-        <v-card-text class="pb-0 h-full">
+        <v-card-text class="expand-card-text">
           <p class="text--secondary">Client: {{ project.clientName }}</p>
           <p>Invoiced hours: {{ project.invoicedHours }}</p>
           <small>project_id: {{ project.id }}</small>
@@ -66,6 +71,8 @@ import IProject from "~/types/Project";
 })
 export default class Card extends Vue {
   @Prop() project!: IProject;
+  @Prop({ default: false }) archiveMode: boolean;
+
   @State("isTimerOn") isTimerOn: boolean;
   @State("activeProjectId") activeProjectId: string;
 
@@ -81,6 +88,10 @@ export default class Card extends Vue {
 
   toggleExpandedSection() {
     this.reveal = !this.reveal;
+  }
+
+  emitComplete() {
+    this.$emit("complete", this.project.id);
   }
 
   emitRemove() {
@@ -108,6 +119,10 @@ export default class Card extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+.expand-card-text {
+  padding-bottom: 0;
+  height: 100%;
 }
 .v-card--reveal {
   bottom: 0;
