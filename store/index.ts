@@ -4,6 +4,7 @@ import { IProject, IInvoice, ITimeLog } from "~/types/Project"
 import moment, { Moment } from "moment";
 import { getNewProjectsState } from "~/helpers/getNewProjectsState";
 import { generateNewInvoice } from "~/helpers/generateInvoice"
+import { round } from "~/helpers/round";
 
 export const state = (): IState => ({
     isTimerOn: false,
@@ -34,54 +35,17 @@ export const mutations = {
     stopTimer(state: IState) {
         state.isTimerOn = false;
     },
-    updateTimeLog(state: IState, { targetProject, startMoment, endMoment }: { targetProject: IProject, startMoment?: Moment, endMoment?: Moment }) {
-        let updatedProject: IProject;
-        if (startMoment) {
-            updatedProject = {
-                ...targetProject,
-                timeLogs: [
-                    ...targetProject.timeLogs,
-                    {
-                        start: startMoment,
-                    }
-                ]
-            }
-        } else {
-            const currentTimeLog: ITimeLog | undefined = targetProject.timeLogs.find((timeLog: ITimeLog) => !timeLog.end);
-            updatedProject = {
-                ...targetProject,
-                timeLogs: [
-                    ...targetProject.timeLogs.filter((timeLog: ITimeLog) => timeLog !== currentTimeLog),
-                    {
-                        ...currentTimeLog,
-                        end: endMoment
-                    }
-                ]
-            }
-        }
-        state.projects = getNewProjectsState(state.projects, updatedProject, targetProject.id);
+    updateTimeLog(state: IState, updatedProject: IProject) {
+        state.projects = getNewProjectsState(state.projects, updatedProject);
     },
     setActiveProject(state: IState, projectId?: string) {
         state.activeProjectId = projectId || '';
     },
-    setTotalHours(state: IState, { targetProject, totalHours }: { targetProject: IProject, totalHours: number }) {
-        const updatedProject: IProject = {
-            ...targetProject,
-            totalHours
-        }
-        state.projects = getNewProjectsState(state.projects, updatedProject, targetProject.id);;
+    setTotalHours(state: IState, updatedProject: IProject) {
+        state.projects = getNewProjectsState(state.projects, updatedProject);;
     },
-    generateInvoice(state: IState, targetProject: IProject) {
-        const invoice: IInvoice = generateNewInvoice(targetProject, state.hourlyRate);
-        const updatedProject: IProject = {
-            ...targetProject,
-            invoices: [
-                ...targetProject.invoices,
-                invoice
-            ],
-            invoicedHours: Math.round((targetProject.invoicedHours + invoice.hours) * 100) / 100
-        }
-        state.projects = getNewProjectsState(state.projects, updatedProject, targetProject.id);
+    setInvoice(state: IState, { invoice, updatedProject }: { invoice: IInvoice, updatedProject: IProject }) {
+        state.projects = getNewProjectsState(state.projects, updatedProject);
         state.displayInvoice = true;
         state.latestInvoice = invoice;
     },
@@ -118,7 +82,16 @@ export const actions = {
             commit('setActiveProject', projectId)
             commit('setTimer');
             const startMoment: Moment = moment();
-            commit('updateTimeLog', { targetProject, startMoment })
+            const updatedProject = {
+                ...targetProject,
+                timeLogs: [
+                    ...targetProject.timeLogs,
+                    {
+                        start: startMoment,
+                    }
+                ]
+            }
+            commit('updateTimeLog', updatedProject)
         }
     },
     stopTracking({ dispatch, commit, state }: { dispatch, commit, state: IState }, projectId: string) {
@@ -127,7 +100,18 @@ export const actions = {
             commit('stopTimer');
             commit('setActiveProject')
             const endMoment: Moment = moment();
-            commit('updateTimeLog', { targetProject, endMoment })
+            const currentTimeLog: ITimeLog | undefined = targetProject.timeLogs.find((timeLog: ITimeLog) => !timeLog.end);
+            const updatedProject = {
+                ...targetProject,
+                timeLogs: [
+                    ...targetProject.timeLogs.filter((timeLog: ITimeLog) => timeLog !== currentTimeLog),
+                    {
+                        ...currentTimeLog,
+                        end: endMoment
+                    }
+                ]
+            }
+            commit('updateTimeLog', updatedProject)
             dispatch('setProjectHours', projectId)
         }
     },
@@ -141,17 +125,31 @@ export const actions = {
                 }
                 return total + end.diff(start, 'hours', true);
             }, 0)
-            const rounded = totalHours < 1 ? Math.round(totalHours * 10000) / 10000 : Math.round(totalHours * 100) / 100;
-            commit('setTotalHours', { targetProject, totalHours: rounded })
+            const rounded = round(totalHours);
+            const updatedProject: IProject = {
+                ...targetProject,
+                totalHours: rounded
+            }
+            commit('setTotalHours', updatedProject)
         }
     },
-    addInvoice({ commit, state }: { commit, state: IState }, projectId: string) {
+    createInvoice({ commit, state }: { commit, state: IState }, projectId: string) {
         const targetProject: IProject | undefined = state.projects.find((project: IProject) => project.id === projectId);
         if (targetProject) {
-            commit('generateInvoice', targetProject)
+            const invoice: IInvoice = generateNewInvoice(targetProject, state.hourlyRate);
+            const totalInvoicedHours: number = targetProject.invoicedHours + invoice.hours;
+            const updatedProject: IProject = {
+                ...targetProject,
+                invoices: [
+                    ...targetProject.invoices,
+                    invoice
+                ],
+                invoicedHours: round(totalInvoicedHours)
+            }
+            commit('setInvoice', { invoice, updatedProject })
         }
     },
-    setDisplayInvoice({ commit }, display: boolean) {
+    displayInvoice({ commit }, display: boolean) {
         commit('setDisplayInvoice', display);
     },
     archiveProject({ commit, state }: { commit, state: IState }, projectId: string) {

@@ -27,7 +27,7 @@
         @remove="triggerRemovePrompt"
         @startTimer="dispatchStartTrackingAction"
         @stopTimer="dispatchStopTrackingAction"
-        @invoice="dispatchAddInvoiceAction"
+        @invoice="dispatchCreateInvoiceAction"
       />
     </v-row>
     <invoice-alert
@@ -64,8 +64,8 @@ export default class ProjectsOverview extends Vue {
   @Action("removeProject") dispatchRemoveProjectAction;
   @Action("startTracking") dispatchStartTrackingAction;
   @Action("stopTracking") dispatchStopTrackingAction;
-  @Action("addInvoice") dispatchAddInvoiceAction;
-  @Action("setDisplayInvoice") dispatchSetDisplayInvoiceAction;
+  @Action("createInvoice") dispatchCreateInvoiceAction;
+  @Action("displayInvoice") dispatchDisplayInvoiceAction;
   @Action("archiveProject") dispatchArchiveProject;
   @Action("archiveProject") dispatchArchiveProjectAction;
 
@@ -123,7 +123,7 @@ export default class ProjectsOverview extends Vue {
   }
 
   dismissInvoice() {
-    this.dispatchSetDisplayInvoiceAction(false);
+    this.dispatchDisplayInvoiceAction(false);
   }
 }
 </script>
