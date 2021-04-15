@@ -1,4 +1,4 @@
-import IProject from "~/types/Project";
+import { IProject } from "~/types/Project";
 
 export const getNewProjectsState = (oldProjectsState: IProject[], updatedProject: IProject, currentProjectId: string) => {
     return oldProjectsState.map((project: IProject) => {

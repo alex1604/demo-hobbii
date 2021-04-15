@@ -1,6 +1,4 @@
-import IProject from "~/types/Project";
-import { IInvoice } from '../../types/Project';
-
+import { IProject, IInvoice } from "~/types/Project";
 export default interface IState {
     isTimerOn: boolean;
     activeProjectId: string | null;

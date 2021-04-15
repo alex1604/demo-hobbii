@@ -13,7 +13,7 @@ export interface ITimeLog {
     end?: Moment;
 }
 
-export default interface IProject {
+export interface IProject {
     id: string;
     clientName: string;
     projectName: string;

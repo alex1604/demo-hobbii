@@ -50,7 +50,7 @@ import Card from "@/components/Card.vue";
 import CreateProjectModal from "@/components/CreateProjectModal.vue";
 import RoundedButton from "@/components/RoundedButton.vue";
 import { Action, State } from "vuex-class-decorator";
-import IProject, { IInvoice } from "~/types/Project";
+import { IProject, IInvoice } from "~/types/Project";
 
 @Component({
   components: {

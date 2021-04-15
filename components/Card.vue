@@ -62,7 +62,7 @@
 import { Vue, Prop, Component } from "vue-property-decorator";
 import { State } from "vuex-class-decorator";
 import PopupMenu from "~/components/PopupMenu.vue";
-import IProject from "~/types/Project";
+import { IProject } from "~/types/Project";
 
 @Component({
   components: {

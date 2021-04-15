@@ -1,9 +1,9 @@
 import IState from "./types/IState"
 import uniqid from 'uniqid'
-import IProject, { IInvoice } from "~/types/Project"
+import { IProject, IInvoice, ITimeLog } from "~/types/Project"
 import moment, { Moment } from "moment";
-import { ITimeLog } from '../types/Project';
 import { getNewProjectsState } from "~/helpers/getNewProjectsState";
+import { generateNewInvoice } from "~/helpers/generateInvoice"
 
 export const state = (): IState => ({
     isTimerOn: false,
@@ -72,27 +72,18 @@ export const mutations = {
         state.projects = getNewProjectsState(state.projects, updatedProject, targetProject.id);;
     },
     generateInvoice(state: IState, targetProject: IProject) {
-        const { totalHours, invoicedHours } = targetProject;
-        const newInvoiceHours: number = totalHours - invoicedHours;
-        const exactAmount: number = newInvoiceHours * state.hourlyRate;
-        const newInvoice: IInvoice = {
-            id: uniqid(),
-            projectId: targetProject.id,
-            projectName: targetProject.projectName,
-            hours: newInvoiceHours,
-            amount: Math.round(exactAmount * 100) / 100,
-        }
+        const invoice: IInvoice = generateNewInvoice(targetProject, state.hourlyRate);
         const updatedProject: IProject = {
             ...targetProject,
             invoices: [
                 ...targetProject.invoices,
-                newInvoice
+                invoice
             ],
-            invoicedHours: Math.round((targetProject.invoicedHours + newInvoiceHours) * 100) / 100
+            invoicedHours: Math.round((targetProject.invoicedHours + invoice.hours) * 100) / 100
         }
         state.projects = getNewProjectsState(state.projects, updatedProject, targetProject.id);
         state.displayInvoice = true;
-        state.latestInvoice = newInvoice;
+        state.latestInvoice = invoice;
     },
     setDisplayInvoice(state: IState, display: boolean) {
         state.displayInvoice = display;
