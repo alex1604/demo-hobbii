@@ -7,7 +7,7 @@
         </v-btn>
       </template>
 
-      <v-list>
+      <v-list class="list">
         <v-list-item-title class="popup-menu-item" @click="emitComplete"
           >Mark as complete</v-list-item-title
         >
@@ -48,7 +48,11 @@ export default class PopupMenu extends Vue {
 }
 
 .popup-menu-item {
-  padding: 5px 15px;
+  padding: 10px 0;
   cursor: pointer;
+}
+
+.list {
+  padding: 0 15px;
 }
 </style>

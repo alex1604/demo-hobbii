@@ -8,7 +8,7 @@
     >
       <rounded-button
         text="Create new project"
-        class="mb-6"
+        class="my-8"
         @click="toggleCreateProjectModal"
       />
     </create-project-modal>
@@ -23,7 +23,7 @@
         :archiveMode="archiveView"
         :project="project"
         :key="project.id"
-        @complete="dispatchArchiveProjectAction"
+        @complete="triggerArchivePrompt"
         @remove="triggerRemovePrompt"
         @startTimer="dispatchStartTrackingAction"
         @stopTimer="dispatchStopTrackingAction"
@@ -36,12 +36,21 @@
       :isVisible="displayInvoice"
       @confirm="dismissInvoice"
     />
-    <remove-prompt
+    <prompt
       :isVisible="showRemovePrompt"
-      :projectName="removedProjectName"
-      @cancelRemove="cancelRemove"
-      @confirmRemove="removeProject"
-    ></remove-prompt>
+      :title="`Remove project ?`"
+      :text="`Are you sure you want to remove the project ${removedProjectName} ?`"
+      @cancel="cancelRemove"
+      @confirm="removeProject"
+    ></prompt>
+    <prompt
+      :isVisible="showArchivePrompt"
+      :title="`Mark as complete ?`"
+      :text="`Are you sure you want to mark the project '${removedProjectName}' as complete ? This action is irreversible. You will still be able to see the project in the 'Archive' page.`"
+      buttonText="Archive"
+      @cancel="cancelArchive"
+      @confirm="archiveProject"
+    ></prompt>
   </v-container>
 </template>
 <script lang="ts">
@@ -78,7 +87,8 @@ export default class ProjectsOverview extends Vue {
 
   showCreateProjectModal: boolean = false;
   showRemovePrompt: boolean = false;
-  currentRemoveId: string = "";
+  showArchivePrompt: boolean = false;
+  activeProjectId: string = "";
 
   get projects(): IProject[] {
     return this.archiveView ? this.archive : this.activeprojects;
@@ -86,7 +96,7 @@ export default class ProjectsOverview extends Vue {
 
   get removedProjectName() {
     return this.projects.find(
-      (project: IProject) => project.id === this.currentRemoveId
+      (project: IProject) => project.id === this.activeProjectId
     )?.projectName;
   }
 
@@ -102,24 +112,43 @@ export default class ProjectsOverview extends Vue {
     this.showRemovePrompt = !this.showRemovePrompt;
   }
 
+  toggleArchivePrompt() {
+    this.showArchivePrompt = !this.showArchivePrompt;
+  }
+
   createProject(payload: { projectName: string; clientName: string }) {
     this.dispatchCreateProjectAction(payload);
     this.toggleCreateProjectModal();
   }
 
   triggerRemovePrompt(projectId) {
-    this.currentRemoveId = projectId;
+    this.activeProjectId = projectId;
     this.toggleRemovePrompt();
+  }
+
+  triggerArchivePrompt(projectId) {
+    this.activeProjectId = projectId;
+    this.toggleArchivePrompt();
   }
 
   cancelRemove() {
     this.toggleRemovePrompt();
   }
 
+  cancelArchive() {
+    this.toggleArchivePrompt();
+  }
+
   removeProject() {
     this.toggleRemovePrompt();
-    this.dispatchRemoveProjectAction(this.currentRemoveId);
-    this.currentRemoveId = "";
+    this.dispatchRemoveProjectAction(this.activeProjectId);
+    this.activeProjectId = "";
+  }
+
+  archiveProject() {
+    this.toggleArchivePrompt();
+    this.dispatchArchiveProjectAction(this.activeProjectId);
+    this.activeProjectId = "";
   }
 
   dismissInvoice() {

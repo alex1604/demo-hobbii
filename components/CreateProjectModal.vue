@@ -44,9 +44,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="emitCancel"> Cancel </v-btn>
+          <v-btn text @click="emitCancel"> Cancel </v-btn>
           <v-btn
-            color="blue darken-1"
+            color="success"
             text
             @click="emitCreate"
             :disabled="isNameDuplicated"
