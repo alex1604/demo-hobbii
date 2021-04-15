@@ -73,7 +73,11 @@ export const actions = {
         }
         commit('addProject', project)
     },
-    removeProject({ commit }, projectId: string) {
+    removeProject({ commit, state }: { dispatch, commit, state: IState }, projectId: string) {
+        if (state.isTimerOn && state.activeProjectId === projectId) {
+            commit('stopTimer');
+            commit('setActiveProject')
+        }
         commit('removeProject', projectId)
     },
     startTracking({ commit, state }: { commit, state: IState }, projectId: string) {
@@ -96,11 +100,12 @@ export const actions = {
     },
     stopTracking({ dispatch, commit, state }: { dispatch, commit, state: IState }, projectId: string) {
         const targetProject: IProject | undefined = state.projects.find((project: IProject) => project.id === projectId);
-        if (targetProject) {
+        const activeTimeLog = targetProject?.timeLogs.find((log: ITimeLog) => !log.end)
+        if (targetProject && activeTimeLog) {
             commit('stopTimer');
             commit('setActiveProject')
             const endMoment: Moment = moment();
-            const currentTimeLog: ITimeLog | undefined = targetProject.timeLogs.find((timeLog: ITimeLog) => !timeLog.end);
+            const currentTimeLog: ITimeLog = activeTimeLog;
             const updatedProject = {
                 ...targetProject,
                 timeLogs: [
