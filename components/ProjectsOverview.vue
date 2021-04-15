@@ -18,6 +18,8 @@
         :project="project"
         :key="project.id"
         @remove="triggerRemovePrompt"
+        @startTimer="dispatchStartTrackingAction"
+        @stopTimer="dispatchStopTrackingAction"
       />
     </v-row>
     <remove-prompt
@@ -33,7 +35,7 @@ import { Component, Vue } from "vue-property-decorator";
 import Card from "@/components/Card.vue";
 import CreateProjectModal from "@/components/CreateProjectModal.vue";
 import RoundedButton from "@/components/RoundedButton.vue";
-import { State } from "vuex-class-decorator";
+import { Action, State } from "vuex-class-decorator";
 import IProject from "~/types/Project";
 
 @Component({
@@ -44,6 +46,10 @@ import IProject from "~/types/Project";
   },
 })
 export default class ProjectsOverview extends Vue {
+  @Action("createProject") dispatchCreateProjectAction;
+  @Action("removeProject") dispatchRemoveProjectAction;
+  @Action("startTracking") dispatchStartTrackingAction;
+  @Action("stopTracking") dispatchStopTrackingAction;
   @State("projects") projects: IProject[];
 
   showCreateProjectModal: boolean = false;
@@ -57,7 +63,7 @@ export default class ProjectsOverview extends Vue {
   }
 
   get isProjectsEmpty() {
-    return this.projects?.length > 0;
+    return this.projects?.length === 0;
   }
 
   toggleCreateProjectModal() {
@@ -69,7 +75,7 @@ export default class ProjectsOverview extends Vue {
   }
 
   createProject(payload: { projectName: string; clientName: string }) {
-    this.$store.dispatch("createProject", payload);
+    this.dispatchCreateProjectAction(payload);
     this.toggleCreateProjectModal();
   }
 
@@ -84,7 +90,7 @@ export default class ProjectsOverview extends Vue {
 
   removeProject() {
     this.toggleRemovePrompt();
-    this.$store.dispatch("removeProject", this.currentRemoveId);
+    this.dispatchRemoveProjectAction(this.currentRemoveId);
     this.currentRemoveId = "";
   }
 }

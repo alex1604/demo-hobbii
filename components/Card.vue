@@ -9,12 +9,20 @@
     </v-card-title>
 
     <v-col justify="center" align="center">
-      <h1>{{ project.totalHours }}</h1>
+      <h1>{{ project.totalHours }} h</h1>
       <v-row justify="center" class="mt-2">
-        <v-btn text color="teal accent-5" :disabled="isTimerOn"
+        <v-btn
+          text
+          color="teal accent-5"
+          :disabled="isTimerOn"
+          @click="emitStartTimer"
           >Start timer</v-btn
         >
-        <v-btn text color="red accent-4" :disabled="isTrackingAnotherProject"
+        <v-btn
+          text
+          color="red accent-4"
+          :disabled="isTrackingAnotherProject"
+          @click="emitStopTimer"
           >Stop timer</v-btn
         >
       </v-row>
@@ -77,6 +85,14 @@ export default class Card extends Vue {
 
   emitRemove() {
     this.$emit("remove", this.project.id);
+  }
+
+  emitStartTimer() {
+    this.$emit("startTimer", this.project.id);
+  }
+
+  emitStopTimer() {
+    this.$emit("stopTimer", this.project.id);
   }
 }
 </script>

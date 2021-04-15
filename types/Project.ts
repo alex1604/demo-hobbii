@@ -7,9 +7,9 @@ interface IInvoice {
     amount: number;
 }
 
-interface ITimeLog {
-    start: Moment;
-    end: Moment;
+export interface ITimeLog {
+    start?: Moment;
+    end?: Moment;
 }
 
 export default interface IProject {
@@ -19,4 +19,5 @@ export default interface IProject {
     totalHours: number;
     invoices: IInvoice[];
     invoicedHours: number;
+    timeLogs: ITimeLog[];
 }
