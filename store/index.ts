@@ -128,7 +128,7 @@ export const actions = {
                 if (!start || !end) {
                     return 0;
                 }
-                return total + end.diff(start, 'hours', true);
+                return total + moment(end).diff(moment(start), 'hours', true);
             }, 0)
             const rounded = round(totalHours);
             const updatedProject: IProject = {
